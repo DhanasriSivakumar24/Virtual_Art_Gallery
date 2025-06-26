@@ -27,7 +27,7 @@ namespace VirtualArtGallery.Entity
         }
         public override string ToString()
         {
-            return $"UserID= {UserId}\t FavoriteArtworkID: {ArtworkId}";
+            return $" 1.UserID= {UserId}\n 2.FavoriteArtworkID: {ArtworkId}";
         }
 
     }

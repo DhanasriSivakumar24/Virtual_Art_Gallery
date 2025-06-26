@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
-using System.Security.Cryptography.X509Certificates;
 
 namespace VirtualArtGallery.Utility
 {

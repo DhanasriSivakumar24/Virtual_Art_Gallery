@@ -67,7 +67,7 @@
 
         public override string ToString()
         {
-            return $"ArtworkId = {artworkId}\n Title = {artTitle}\n Description = {artDescription}\n CreationDate = {creationDate}\n Medium = {Medium}\n ImageUrl = {ImageUrl}\n ArtistId = {ArtistId}";
+            return $" ArtworkId = {artworkId}\n Title = {artTitle}\n Description = {artDescription}\n CreationDate = {creationDate}\n Medium = {Medium}\n ImageUrl = {ImageUrl}\n ArtistId = {ArtistId}";
         }
     }
 }

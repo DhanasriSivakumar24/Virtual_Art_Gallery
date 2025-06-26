@@ -1,5 +1,4 @@
-﻿using System;
-using VirtualArtGallery.Entity;
+﻿using VirtualArtGallery.Entity;
 
 namespace VirtualArtGallery.Dao
 {
@@ -7,15 +6,15 @@ namespace VirtualArtGallery.Dao
     {
         // Artwork Management 
         bool AddArtwork(Artwork artwork); //Completed
-        bool UpdateArtwork(Artwork artwork); 
+        bool UpdateArtwork(Artwork artwork); //Completed
         bool RemoveArtwork(int artworkID);//Completed
-        Artwork GetArtworkById(int artworkID);
-        List<Artwork>SearchArtworks(string name);
+        Artwork GetArtworkById(int artworkID);//Completed
+        List<Artwork>SearchArtworks(string name);//Completed 
 
         // User Favorites 
-        bool AddArtworkToFavorite(int userId, int artworkId);
-        bool RemoveArtworkFromFavorite(int userId, int artworkId);
-        List<Artwork> GetUserFavoriteArtworks(int userId);
+        bool AddArtworkToFavorite(int userId, int artworkId);//Completed
+        bool RemoveArtworkFromFavorite(int userId, int artworkId);//Completed
+        bool GetUserFavoriteArtworks(int userId); //Completed
 
     }
 }
