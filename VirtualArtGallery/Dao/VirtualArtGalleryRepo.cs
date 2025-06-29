@@ -6,7 +6,7 @@ using VirtualArtGallery.Utility;
 
 namespace VirtualArtGallery.Dao
 {
-    internal class VirtualArtGalleryRepo : IVirtualArtGallery
+    public class VirtualArtGalleryRepo : IVirtualArtGallery
     {
         SqlConnection sqlConnection = null;
         SqlCommand cmd = null;
@@ -20,7 +20,7 @@ namespace VirtualArtGallery.Dao
         {
             //sqlConnection = new SqlConnection("Server= LAPTOP-HUOM74K1;Database=Virtual_Art_Gallery;Trusted_connection =True");
             //sqlConnection = new SqlConnection(DbConnUtil.GetConnectionString());
-            sqlConnection = DbConnUtil.GetConnectionObject();
+            //sqlConnection = DbConnUtil.GetConnectionObject();
             cmd = new SqlCommand();
 
             artworks = new List<Artwork>();
@@ -28,6 +28,7 @@ namespace VirtualArtGallery.Dao
                 new Artwork() { ArtworkId = 1, ArtworkTitle = "Starry Nights", ArtworkDescription = "Vincent Van Gough Masterpiece", CreationDate = DateTime.Now, ImageUrl = "https://StarryNights.jpeg", Medium = "Starry Nights" };
             }
         }
+
         #region AddArtwork
         //AddArtwork
         public bool AddArtwork(Artwork artwork)
@@ -74,18 +75,19 @@ namespace VirtualArtGallery.Dao
                 Artwork artworks = new Artwork();
                 using (sqlConnection = DbConnUtil.GetConnectionObject())
                 {
-                    cmd.CommandText = "delete * from Artwork where ArtworkId = @artworkId";
-                    cmd.Parameters.RemoveAt(artworkID);
+                    cmd.CommandText = "delete from Artwork where ArtworkId = @artworkId";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@artworkId", artworkID);
                     cmd.Connection = sqlConnection;
                     sqlConnection.Open();
                     int rowAffected = cmd.ExecuteNonQuery();
-                    if (rowAffected > 0)
+                    if (rowAffected == 0)
                     {
-                        Console.WriteLine($"\n Your Artwork has been Remove Successfully");
-                        return true;
+                        throw new ArtWorkNotFoundException($"Artwork with ID {artworkID} not found.");
                     }
-                    else
-                        return false;
+
+                    Console.WriteLine("\n Your Artwork has been removed successfully.");
+                    return true;
                 }
             }
             catch (ArtWorkNotFoundException ex)
@@ -105,8 +107,9 @@ namespace VirtualArtGallery.Dao
                 Artwork artworks = new Artwork();
                 using (sqlConnection = DbConnUtil.GetConnectionObject())
                 {
-                    cmd.CommandText = "update Artwork set Title = @title, Description = @description, CreationDate = @creationDate, Medium = @medium, ImageUrl = @url where ArtworkId = @ArtistId";
-                    cmd.Parameters.AddWithValue("@ArtworkID", artwork.ArtworkId);
+                    cmd.CommandText = "update Artwork set Title = @title, Description = @description, CreationDate = @creationDate, Medium = @medium, ImageUrl = @url where ArtworkId = @ArtworkId";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@ArtworkId", artwork.ArtworkId);
                     cmd.Parameters.AddWithValue("@Title", artwork.ArtworkTitle);
                     cmd.Parameters.AddWithValue("@Description", artwork.ArtworkDescription);
                     cmd.Parameters.AddWithValue("@CreationDate", artwork.CreationDate);
@@ -138,24 +141,56 @@ namespace VirtualArtGallery.Dao
         public Artwork GetArtworkById(int artworkID)
         {
             Artwork artworks = new Artwork();
-            using (sqlConnection = DbConnUtil.GetConnectionObject())
-            {
-                cmd.CommandText = "select artworkId,title,description,imageUrl from Artwork where ArtworkId = @artworkId";
-                cmd.Parameters.AddWithValue("@artworkId", artworkID);
-                cmd.Connection = sqlConnection;
-                sqlConnection.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+            //try
+            //{
+                using (sqlConnection = DbConnUtil.GetConnectionObject())
                 {
-                    Artwork artwork = new Artwork();
-                    artwork.ArtworkId = (int)reader["ArtworkId"];
-                    artwork.ArtworkTitle = (string)reader["Title"];
-                    artwork.ArtworkDescription = (string)reader["Description"];
-                    artwork.ImageUrl = (string)reader["ImageUrl"];
-                    return artwork;
-                }
+                    cmd.CommandText = "select * from Artwork where ArtworkId = @artworkId";
+                    cmd.Parameters.AddWithValue("@artworkId", artworkID);
+                    cmd.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        Artwork artwork = new Artwork();
+                        artwork.ArtworkId = (int)reader["ArtworkId"];
+                        artwork.ArtworkTitle = (string)reader["Title"];
+                        artwork.ArtworkDescription = (string)reader["Description"];
+                        artwork.ImageUrl = (string)reader["ImageUrl"];
+                        return artwork;
+                    }
                 return artworks;
-            }
+                    //else
+                    //{
+                    //    throw new ArtWorkNotFoundException($"Artwork with ID {artworkID} was not found.");
+                    //}
+                }
+            //}
+            //catch (ArtWorkNotFoundException ex)
+            //{
+            //    throw new ArtWorkNotFoundException($"{ex.Message}");
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
+            //using (sqlConnection = DbConnUtil.GetConnectionObject())
+            //{
+            //    cmd.CommandText = "select artworkId,title,description,imageUrl from Artwork where ArtworkId = @artworkId";
+            //    cmd.Parameters.AddWithValue("@artworkId", artworkID);
+            //    cmd.Connection = sqlConnection;
+            //    sqlConnection.Open();
+            //    SqlDataReader reader = cmd.ExecuteReader();
+            //    if (reader.Read())
+            //    {
+            //        Artwork artwork = new Artwork();
+            //        artwork.ArtworkId = (int)reader["ArtworkId"];
+            //        artwork.ArtworkTitle = (string)reader["Title"];
+            //        artwork.ArtworkDescription = (string)reader["Description"];
+            //        artwork.ImageUrl = (string)reader["ImageUrl"];
+            //        return artwork;
+            //    }
+            //}
         }
         #endregion
 
@@ -170,6 +205,7 @@ namespace VirtualArtGallery.Dao
                 {
                     Artwork artwork = new Artwork();
                     cmd.CommandText = "select * from Artwork where title like @name";
+                    cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@name", $"%{name}%");
                     //cmd.Parameters.AddWithValue("@name", name);
                     cmd.Connection = sqlConnection;
@@ -190,7 +226,7 @@ namespace VirtualArtGallery.Dao
                 }
                 return artworks;
             }
-            catch(ArtWorkNotFoundException e) 
+            catch(ArtWorkNotFoundException) 
             {
                 throw new ArtWorkNotFoundException($"The Artwork is not found.. Please Check the Artwork {name}");
             }
@@ -302,6 +338,142 @@ namespace VirtualArtGallery.Dao
             catch (ArtWorkNotFoundException e)
             {
                 throw new ArtWorkNotFoundException($"The ArtworkId or UserId is not found.. Please Check the ID {artworkId} or {userId} : {e.Message}");
+            }
+        }
+        #endregion
+
+        #region AddGallery
+        public bool AddGallery(Gallery gallery)
+        {
+            Gallery artworks = new Gallery();
+            using (sqlConnection = DbConnUtil.GetConnectionObject())
+            {
+                cmd.CommandText = "insert into Gallery values (@GalleryID,@GalleryName,@Description,@Location,@Curator,@OpeningHours)";
+                cmd.Parameters.AddWithValue("@GalleryID", gallery.GalleryId);
+                cmd.Parameters.AddWithValue("@GalleryName", gallery.GalleryName);
+                cmd.Parameters.AddWithValue("@Description", gallery.Description);
+                cmd.Parameters.AddWithValue("@Location", gallery.GalleryLocation);
+                cmd.Parameters.AddWithValue("@Curator", gallery.Curator);
+                cmd.Parameters.AddWithValue("@OpeningHours", gallery.OpeningHours);
+                cmd.Connection = sqlConnection;
+                sqlConnection.Open();
+                int rowAffected = cmd.ExecuteNonQuery();
+                try
+                {
+                    if (rowAffected > 0)
+                    {
+                        Console.WriteLine($"\n Your Gallery has been added Successfully");
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+
+            }
+        }
+        #endregion
+
+        #region UpdateGallery
+        public bool UpdateGallery(Gallery gallery)
+        {
+            try
+            {
+                Artwork artworks = new Artwork();
+                using (sqlConnection = DbConnUtil.GetConnectionObject())
+                {
+                    cmd.CommandText = "update Gallery set GalleryName = @GalleryName, Description = @description, Location = @Location, Curator = @Curator, OpeningHours = @OpeningHours where GalleryID = @GalleryID";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@GalleryID", gallery.GalleryId);
+                    cmd.Parameters.AddWithValue("@GalleryName", gallery.GalleryName);
+                    cmd.Parameters.AddWithValue("@Description", gallery.Description);
+                    cmd.Parameters.AddWithValue("@Location", gallery.GalleryLocation);
+                    cmd.Parameters.AddWithValue("@Curator", gallery.Curator);
+                    cmd.Parameters.AddWithValue("@OpeningHours", gallery.OpeningHours);
+                    cmd.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    int rowAffected = cmd.ExecuteNonQuery();
+                    if (rowAffected != 0)
+                    {
+                        Console.WriteLine($"\n Your Gallery has been Updated Successfully");
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        #endregion
+
+        #region Remove Gallery
+        public bool RemoveGallery(int galleryID)
+        {
+            try
+            {
+                Gallery artworks = new Gallery();
+                using (sqlConnection = DbConnUtil.GetConnectionObject())
+                {
+                    cmd.CommandText = "delete from Gallery where galleryID = @galleryID";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@galleryID", galleryID);
+                    cmd.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    int rowAffected = cmd.ExecuteNonQuery();
+                    if (rowAffected == 0)
+                    {
+                        throw new ArtWorkNotFoundException($"Gallery with ID {galleryID} not found.");
+                    }
+                    Console.WriteLine("\n Your Artwork has been removed successfully.");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new($"Failed to Remove Gallery by Id : {ex.Message}");
+            }
+            }
+        #endregion
+
+        #region SearchGallery
+        public List<Gallery> SearchGallery(string name)
+        {
+            try
+            {
+                List<Gallery> artworks = new List<Gallery>();
+                using (sqlConnection = DbConnUtil.GetConnectionObject())
+                {
+                    Artwork artwork = new Artwork();
+                    cmd.CommandText = "select * from Gallery where galleryName like @name";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@name", $"%{name}%");
+                    cmd.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Gallery gallery = new Gallery();
+                        gallery.GalleryId = (int)reader["GalleryId"];
+                        gallery.GalleryName = (string)reader["GalleryName"];
+                        gallery.Description = (string)reader["Description"];
+                        gallery.GalleryLocation = (string)reader["Location"];
+                        gallery.Curator = (int)reader["Curator"];
+                        gallery.OpeningHours = (string)reader["OpeningHours"];
+                        artworks.Add(gallery);
+                    }
+                }
+                return artworks;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+                return new List<Gallery>();
             }
         }
         #endregion

@@ -1,6 +1,6 @@
 ﻿namespace VirtualArtGallery.Entity
 {
-    internal class Artwork
+    public class Artwork
     {
         //Attributes of the Artwork
         int artworkId;

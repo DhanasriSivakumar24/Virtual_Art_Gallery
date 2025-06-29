@@ -1,9 +1,7 @@
 ﻿
-using System.Xml.Linq;
-
 namespace VirtualArtGallery.Entity
 {
-    internal class User
+    public class User
     {
         int userId;
         string userName;

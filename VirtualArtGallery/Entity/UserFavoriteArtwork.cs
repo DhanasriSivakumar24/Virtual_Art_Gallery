@@ -1,7 +1,7 @@
 ﻿
 namespace VirtualArtGallery.Entity
 {
-    internal class UserFavoriteArtwork
+    public class UserFavoriteArtwork
     {
         int userId;
         int artworkId;

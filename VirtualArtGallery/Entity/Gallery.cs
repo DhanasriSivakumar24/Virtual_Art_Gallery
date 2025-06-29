@@ -1,14 +1,14 @@
 ﻿
 namespace VirtualArtGallery.Entity
 {
-    internal class Gallery
+    public class Gallery
     {
         int galleryId;
         string galleryName;
         string description;
         string galleryLocation;
         int curator;
-        DateTime openingHours;
+        string openingHours;
 
         public int GalleryId
         { 
@@ -35,7 +35,7 @@ namespace VirtualArtGallery.Entity
             get { return curator; }
             set { curator = value; }
         }
-        public DateTime OpeningHours
+        public string OpeningHours
         {
             get { return openingHours; }
             set { openingHours = value; }
@@ -45,7 +45,7 @@ namespace VirtualArtGallery.Entity
         {
         
         }
-        public Gallery(int galleryId, string galleryName, string description, string galleryLocation, int curator, DateTime openingHours)
+        public Gallery(int galleryId, string galleryName, string description, string galleryLocation, int curator, string openingHours)
         {
             GalleryId = galleryId;
             GalleryName = galleryName;

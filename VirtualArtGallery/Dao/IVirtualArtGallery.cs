@@ -2,19 +2,24 @@
 
 namespace VirtualArtGallery.Dao
 {
-    internal interface IVirtualArtGallery
+    public interface IVirtualArtGallery
     {
         // Artwork Management 
-        bool AddArtwork(Artwork artwork); //Completed
-        bool UpdateArtwork(Artwork artwork); //Completed
-        bool RemoveArtwork(int artworkID);//Completed
-        Artwork GetArtworkById(int artworkID);//Completed
-        List<Artwork>SearchArtworks(string name);//Completed 
+        public bool AddArtwork(Artwork artwork); //Completed
+        public bool UpdateArtwork(Artwork artwork); //Completed
+        public bool RemoveArtwork(int artworkID);//Completed
+        public Artwork GetArtworkById(int artworkID);//Completed
+        public List<Artwork>SearchArtworks(string name);//Completed 
 
         // User Favorites 
-        bool AddArtworkToFavorite(int userId, int artworkId);//Completed
-        bool RemoveArtworkFromFavorite(int userId, int artworkId);//Completed
-        bool GetUserFavoriteArtworks(int userId); //Completed
+        public bool AddArtworkToFavorite(int userId, int artworkId);//Completed
+        public bool RemoveArtworkFromFavorite(int userId, int artworkId);//Completed
+        public bool GetUserFavoriteArtworks(int userId); //Completed
 
+        //Gallery Management
+        public bool AddGallery(Gallery artwork);//Completed
+        public bool UpdateGallery(Gallery artwork);//Completed
+        public bool RemoveGallery(int galleryID);//Completed
+        public List<Gallery> SearchGallery(string galleryName);
     }
 }

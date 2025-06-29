@@ -1,6 +1,6 @@
 ﻿namespace VirtualArtGallery.Entity
 {
-    internal class Artist
+    public class Artist
     {
         //Attributes of the Artist Class
         int artistId;
@@ -67,7 +67,7 @@
         }
         public override string ToString()
         {
-            return $"ArtistID= {ArtistId}\t Name= {ArtistName}\t Biography= {Biography}\t ContactInfo= {ContactInfo}\t Nationality= {Nationality}\t BirthDate= {BirthDate}";
+            return $"ArtistID=     {ArtistId}\nName=         {ArtistName}\nBiography=    {Biography}\nContactInfo=  {ContactInfo}\nNationality=  {Nationality}\nBirthDate=    {BirthDate}";
         }
     }
 }
