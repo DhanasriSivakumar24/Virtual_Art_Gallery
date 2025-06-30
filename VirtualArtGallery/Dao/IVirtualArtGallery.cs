@@ -1,5 +1,4 @@
 ﻿using VirtualArtGallery.Entity;
-
 namespace VirtualArtGallery.Dao
 {
     public interface IVirtualArtGallery

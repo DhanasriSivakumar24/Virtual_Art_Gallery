@@ -1,4 +1,5 @@
-﻿namespace VirtualArtGallery.Entity
+﻿
+namespace VirtualArtGallery.Entity
 {
     public class Artist
     {

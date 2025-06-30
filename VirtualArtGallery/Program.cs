@@ -1,5 +1,4 @@
-﻿
-using VirtualArtGallery.MainModule;
+﻿using VirtualArtGallery.MainModule;
 
 namespace VirtualArtGallery
 {
