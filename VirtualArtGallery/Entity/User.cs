@@ -10,7 +10,6 @@
         string lastName;
         DateTime userDob;
         string profilePicture;
-
         public int UserId
         {
             get {  return userId; }

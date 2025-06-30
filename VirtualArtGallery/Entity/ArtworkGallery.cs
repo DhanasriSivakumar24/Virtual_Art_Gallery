@@ -4,7 +4,6 @@
     {
         int artworkId;
         int galleryId;
-
         public int ArtworkId
         {
             get { return artworkId; }

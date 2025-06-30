@@ -8,7 +8,6 @@
         string galleryLocation;
         int curator;
         string openingHours;
-
         public int GalleryId
         { 
             get { return galleryId; }

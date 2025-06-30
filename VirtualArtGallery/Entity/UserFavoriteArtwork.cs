@@ -4,7 +4,6 @@
     {
         int userId;
         int artworkId;
-        
         public int UserId
         { 
             get { return userId; } 

@@ -1,4 +1,5 @@
-﻿namespace VirtualArtGallery.Exceptions
+﻿
+namespace VirtualArtGallery.Exceptions
 {
     internal class ArtWorkNotFoundException:ApplicationException
     {

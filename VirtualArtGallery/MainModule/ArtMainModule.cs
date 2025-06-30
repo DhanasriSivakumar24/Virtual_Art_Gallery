@@ -1,7 +1,6 @@
 ﻿using VirtualArtGallery.Dao;
 using VirtualArtGallery.Entity;
 
-
 namespace VirtualArtGallery.MainModule
 {
     public class ArtMainModule
