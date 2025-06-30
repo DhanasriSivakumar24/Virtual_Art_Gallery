@@ -122,6 +122,7 @@ namespace VirtualArtGallery.Test
         }
 
         [Test]
+        [Ignore("It is Removed in the first testing itself")]
         public void Test_To_Remove_Gallery()
         {
             Gallery gallery = new Gallery()
@@ -131,5 +132,6 @@ namespace VirtualArtGallery.Test
             bool updateStatus = repository.RemoveGallery(gallery.GalleryId);
             Assert.That(updateStatus, Is.True);
         }
+
     }
 }

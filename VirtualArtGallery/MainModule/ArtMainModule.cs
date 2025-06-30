@@ -9,7 +9,7 @@ namespace VirtualArtGallery.MainModule
         public void Run()
         {
             int ch = 0;
-            while (ch != 9)
+            while (ch != 5)
             {
                 Console.WriteLine("\n==== Welcome to Virtual Art Gallery ====");
                 Console.WriteLine("\n--- Virtual Art Gallery Menu---");
@@ -51,6 +51,7 @@ namespace VirtualArtGallery.MainModule
                 Console.WriteLine("\t3. View Artwork by ID");
                 Console.WriteLine("\t4. Search Artworks by Title");
                 Console.WriteLine("\t5. Update Artwork");
+                Console.WriteLine("\t6. Exit");
                 Console.Write("\nEnter your choice: ");
                 ch = Convert.ToInt32(Console.ReadLine());
                 switch (ch)
@@ -106,7 +107,16 @@ namespace VirtualArtGallery.MainModule
             Console.WriteLine("\n\t---- 2. Remove Artwork by ID ----");
             Console.WriteLine("\nEnter The Artwork ID");
             int removeArtworkById = Convert.ToInt32(Console.ReadLine());
-            bool removed = _virtualArtGallery.RemoveArtwork(removeArtworkById);
+            try
+            {
+                bool removed = _virtualArtGallery.RemoveArtwork(removeArtworkById);
+                if(removed)
+                    Console.WriteLine("Artwork is removed succesfully");
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
 
         void GetArtworkById()
@@ -144,6 +154,10 @@ namespace VirtualArtGallery.MainModule
                 {
                     Console.WriteLine($"\n{item}");
                 }
+            }
+            else
+            {
+                Console.WriteLine("No Artwork Found Containing this Keyword");
             }
         }
 
@@ -223,7 +237,14 @@ namespace VirtualArtGallery.MainModule
             int removeuserId = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("\nEnter your favourite Artwork ID");
             int removeArtworkId = Convert.ToInt32(Console.ReadLine());
-            bool removed = _virtualArtGallery.RemoveArtworkFromFavorite(removeuserId, removeArtworkId);
+            try
+            {
+                bool removed = _virtualArtGallery.RemoveArtworkFromFavorite(removeuserId, removeArtworkId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
         void GetUserFavouriteArtwork()
         {
@@ -318,13 +339,23 @@ namespace VirtualArtGallery.MainModule
             Console.WriteLine("\n\t---- 2. Remove Gallery by ID ----");
             Console.Write("Enter Gallery ID: ");
             int id = Convert.ToInt32(Console.ReadLine());
-            bool removed = _virtualArtGallery.RemoveGallery(id);
+            try
+            {
+                bool removed = _virtualArtGallery.RemoveGallery(id);
+                if(removed)
+                    Console.WriteLine("Gallery Removed Successfully");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
+            
         }
 
         void SearchGalleryByName()
         {
             Console.WriteLine("\n\t---- Search Galleries by Name ----");
-            Console.Write("Enter keyword: ");
+            Console.Write("\nEnter keyword: ");
             string keyword = Console.ReadLine();
             List<Gallery> gallery = _virtualArtGallery.SearchGallery(keyword);
             if (gallery.Count > 0)
@@ -334,6 +365,10 @@ namespace VirtualArtGallery.MainModule
                 {
                     Console.WriteLine($"\n{item}");
                 }
+            }
+            else
+            {
+                Console.WriteLine("No Gallery Found Containing this Keyword");
             }
         }
         #endregion

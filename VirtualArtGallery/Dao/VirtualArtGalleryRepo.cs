@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlClient;
-using System.Xml.Linq;
 using VirtualArtGallery.Entity;
 using VirtualArtGallery.Exceptions;
 using VirtualArtGallery.Utility;
@@ -11,22 +10,9 @@ namespace VirtualArtGallery.Dao
         SqlConnection sqlConnection = null;
         SqlCommand cmd = null;
 
-        //Declaring a objects as List
-         List<Artwork> artworks;
-        List<UserFavoriteArtwork> userFavorites;
-
-        //Object Initiallization in Constructor
         public VirtualArtGalleryRepo()
         {
-            //sqlConnection = new SqlConnection("Server= LAPTOP-HUOM74K1;Database=Virtual_Art_Gallery;Trusted_connection =True");
-            //sqlConnection = new SqlConnection(DbConnUtil.GetConnectionString());
-            //sqlConnection = DbConnUtil.GetConnectionObject();
             cmd = new SqlCommand();
-
-            artworks = new List<Artwork>();
-            {
-                new Artwork() { ArtworkId = 1, ArtworkTitle = "Starry Nights", ArtworkDescription = "Vincent Van Gough Masterpiece", CreationDate = DateTime.Now, ImageUrl = "https://StarryNights.jpeg", Medium = "Starry Nights" };
-            }
         }
 
         #region AddArtwork
@@ -85,14 +71,13 @@ namespace VirtualArtGallery.Dao
                     {
                         throw new ArtWorkNotFoundException($"Artwork with ID {artworkID} not found.");
                     }
-
                     Console.WriteLine("\n Your Artwork has been removed successfully.");
                     return true;
                 }
             }
             catch (ArtWorkNotFoundException ex)
             {
-                Console.WriteLine($"Failed to Updated Artwork by Id : {ex.Message}");
+                Console.WriteLine($"Failed to remove Artwork by Id : {ex.Message}");
                 return false;
             }
         }
@@ -130,7 +115,7 @@ namespace VirtualArtGallery.Dao
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to remove Artwork by Id : {ex.Message}");
+                Console.WriteLine($"Failed to Update Artwork by Id : {ex.Message}");
                 return false;
             }
         }
@@ -140,9 +125,8 @@ namespace VirtualArtGallery.Dao
         //GetArtworkById
         public Artwork GetArtworkById(int artworkID)
         {
-            Artwork artworks = new Artwork();
-            //try
-            //{
+            try
+            {
                 using (sqlConnection = DbConnUtil.GetConnectionObject())
                 {
                     cmd.CommandText = "select * from Artwork where ArtworkId = @artworkId";
@@ -157,40 +141,18 @@ namespace VirtualArtGallery.Dao
                         artwork.ArtworkTitle = (string)reader["Title"];
                         artwork.ArtworkDescription = (string)reader["Description"];
                         artwork.ImageUrl = (string)reader["ImageUrl"];
+                        artwork.Medium = (string)reader["Medium"];
+                        artwork.CreationDate = (DateTime)reader["CreationDate"];
+                        artwork.ArtistId = (int)reader["ArtistId"];
                         return artwork;
                     }
-                return artworks;
-                    //else
-                    //{
-                    //    throw new ArtWorkNotFoundException($"Artwork with ID {artworkID} was not found.");
-                    //}
+                    return null;
                 }
-            //}
-            //catch (ArtWorkNotFoundException ex)
-            //{
-            //    throw new ArtWorkNotFoundException($"{ex.Message}");
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
-            //using (sqlConnection = DbConnUtil.GetConnectionObject())
-            //{
-            //    cmd.CommandText = "select artworkId,title,description,imageUrl from Artwork where ArtworkId = @artworkId";
-            //    cmd.Parameters.AddWithValue("@artworkId", artworkID);
-            //    cmd.Connection = sqlConnection;
-            //    sqlConnection.Open();
-            //    SqlDataReader reader = cmd.ExecuteReader();
-            //    if (reader.Read())
-            //    {
-            //        Artwork artwork = new Artwork();
-            //        artwork.ArtworkId = (int)reader["ArtworkId"];
-            //        artwork.ArtworkTitle = (string)reader["Title"];
-            //        artwork.ArtworkDescription = (string)reader["Description"];
-            //        artwork.ImageUrl = (string)reader["ImageUrl"];
-            //        return artwork;
-            //    }
-            //}
+            }
+            catch (ArtWorkNotFoundException ex)
+            {
+                throw new ArtWorkNotFoundException($"The ArtworkId is not found {ex.Message}");
+            }
         }
         #endregion
 
@@ -226,9 +188,9 @@ namespace VirtualArtGallery.Dao
                 }
                 return artworks;
             }
-            catch(ArtWorkNotFoundException) 
+            catch(Exception ex) 
             {
-                throw new ArtWorkNotFoundException($"The Artwork is not found.. Please Check the Artwork {name}");
+                throw new Exception($"The Artwork is not found.. Please Check the Artwork");
             }
         }
         #endregion
@@ -326,13 +288,12 @@ namespace VirtualArtGallery.Dao
                     cmd.Connection = sqlConnection;
                     sqlConnection.Open();
                     int rowAffected = cmd.ExecuteNonQuery();
-                    if (rowAffected > 0)
+                    if (rowAffected== 0)
                     {
-                        Console.WriteLine($"\nYour Favourite Artwork has been removed Successfully");
-                        return true;
+                        throw new ArtWorkNotFoundException($"\nYour Favourite Artwork has been removed Successfully");
                     }
-                    else
-                        return false;
+                    Console.WriteLine("\n Your Artwork has been removed successfully.");
+                    return true;
                 }
             }
             catch (ArtWorkNotFoundException e)
@@ -436,9 +397,9 @@ namespace VirtualArtGallery.Dao
             }
             catch (Exception ex)
             {
-                throw new($"Failed to Remove Gallery by Id : {ex.Message}");
+                throw new Exception($"Failed to Remove Gallery by Id : {ex.Message}");
             }
-            }
+        }
         #endregion
 
         #region SearchGallery
@@ -472,8 +433,7 @@ namespace VirtualArtGallery.Dao
             }
             catch (Exception e)
             {
-                Console.WriteLine($"{e.Message}");
-                return new List<Gallery>();
+                throw new Exception($"The gallery is not found.. Please Check the Gallery name");
             }
         }
         #endregion

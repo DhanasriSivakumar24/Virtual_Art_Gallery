@@ -2,7 +2,6 @@
 {
     public class Artwork
     {
-        //Attributes of the Artwork
         int artworkId;
         string artTitle;
         string artDescription;
@@ -11,7 +10,6 @@
         string imageUrl;
         int artistId;
 
-        //Getter and Setter Property
         public int ArtworkId
         {
             get { return artworkId; }
@@ -47,13 +45,12 @@
             get { return artistId; }
             set { artistId = value; }
         }
-
-        //Default Constructor
+       
         public Artwork() 
         { 
 
         }
-        //Parametrized Constructor
+        
         public Artwork(int id, string title, string description, DateTime date,string medium, string url, int artistId)
         {
             artworkId = id;

@@ -68,7 +68,6 @@ namespace VirtualArtGallery.Entity
             UserDob = userDob;
             ProfilePicture = profilePicture;
         }
-
         public override string ToString()
         {
             return $"UserID= {UserId}\t Username= {UserName}\t Email= {Email}\t Name= {FirstName} {LastName}\t Passwords= {Password}\t DateOfBirth= {UserDob}\t ProfilePicture= {ProfilePicture}";

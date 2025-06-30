@@ -2,7 +2,6 @@
 {
     public class Artist
     {
-        //Attributes of the Artist Class
         int artistId;
         string artistName;
         string biography;
@@ -11,7 +10,6 @@
         string website;
         string contactInfo;
 
-        //Getter and Setter Properties
         public int ArtistId
         {
             get { return artistId; }
@@ -48,12 +46,10 @@
             set { contactInfo = value; }
         }
 
-        //Default Constructor
         public Artist()
         {
 
         }
-        //Parameterized Constructor
         public Artist(int artistId, string artistName, string biography, DateTime birthDate, string nationality, string website, string contactInfo)
         {
             ArtistId = artistId;
