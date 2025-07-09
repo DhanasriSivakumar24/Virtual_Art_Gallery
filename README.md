@@ -12,12 +12,12 @@ The Virtual Art Gallery is a C#-based console application that allows users to C
 - Unit tests implemented using NUnit framework
 
 # Tech Stack
-- Language: C#
-- Framework: .NET Core / .NET 6.0
-- Database: SQL Server
+- Language:    C#
+- Framework:   .NET Core / .NET 6.0
+- Database:    SQL Server
 - Data Access: ADO.NET
-- Testing: NUnit
-- IDE: Visual Studio 2022
+- Testing:     NUnit
+- IDE:         Visual Studio 2022
 
 # Unit Testing
 The project includes unit tests to verify:
